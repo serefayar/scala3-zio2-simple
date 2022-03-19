@@ -1,9 +1,11 @@
 package monarch.system.config
 
+import eu.timepit.refined.types.string.NonEmptyString
+
 
 case class PostgresConfig(
-    className: String,
-    url: String,
-    user: String,
-    password: String
+    className: NonEmptyString,
+    url: NonEmptyString,
+    user: NonEmptyString,
+    password: NonEmptyString
 )

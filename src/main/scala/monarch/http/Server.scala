@@ -19,6 +19,7 @@ import monarch.system.db.DBTransactor
 import monarch.Environment.AppEnv
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
+  import eu.timepit.refined.auto.*
 
 object Server:
 
@@ -38,7 +39,7 @@ object Server:
       "/" -> (CustomerRoutes.routes <+> swaggerRoutes)
     ).orNotFound
     _ <- BlazeServerBuilder[RIO[AppEnv, *]]
-      .bindHttp(9090, "0.0.0.0")
+      .bindHttp(config.port, config.host)
       .withoutBanner
       .withHttpApp(routes)
       .serve

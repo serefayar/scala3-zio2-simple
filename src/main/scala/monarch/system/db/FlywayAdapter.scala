@@ -8,6 +8,7 @@ import monarch.system.config.PostgresConfig
 import org.flywaydb.core.api.configuration.Configuration
 import org.flywaydb.core.api.output.MigrateResult
 import org.flywaydb.core.api.configuration.FluentConfiguration
+import eu.timepit.refined.auto.*
 
 trait FlywayAdapter:
 
