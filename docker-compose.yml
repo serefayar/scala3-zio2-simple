@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    image: postgres:14-alpine3.15
+    restart: always
+    environment:
+      - POSTGRES_USER=monarch
+      - POSTGRES_PASSWORD=monarch
+      - POSTGRES_DB=monarch
+    ports:
+      - 5432:5432
