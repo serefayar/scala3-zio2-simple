@@ -19,6 +19,7 @@ trait CustomerRepository extends Repository[Task, Customer, Long]:
   def insert(customer: Customer): Task[Long]
 
   def update(id: Long, customer: Customer): Task[Unit]
+  
 
 object CustomerRepository extends zio.Accessible[CustomerRepository]
 

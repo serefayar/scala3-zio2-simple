@@ -32,8 +32,14 @@ lazy val root = project
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % "1.0.0-M1",
       
       "com.github.pureconfig" %% "pureconfig-core" % "0.17.1",
+
+      "dev.zio" %% "zio-test" % "2.0.0-RC2" % "test",
+      "dev.zio" %% "zio-mock" % "1.0.0-RC2-2" % "test",
+      "dev.zio" %% "zio-test-sbt" % "2.0.0-RC2" % "test",
       "com.github.sbt" % "junit-interface" % "0.13.3" % "test"
-    ) 
+    ) ,
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
+
     /*++ Seq("com.chuusai" %% "shapeless" % "2.4.0-M1")
       .map(_.cross(CrossVersion.for3Use2_13))*/
   )
