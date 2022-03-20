@@ -25,13 +25,13 @@ object Server:
 
   def run(): ZIO[AppEnv & Config, Throwable, Unit] = for {
 
-    config <- Config.httpServerConfig
+    config <- Config(_.httpServer)
     swaggerRoutes = ZHttp4sServerInterpreter()
       .from(
         SwaggerInterpreter().fromServerEndpoints[RIO[AppEnv, *]](
           CustomerRoutes.endpoints,
           "Monarch",
-          "1.0"
+          "0.1.0"
         )
       )
       .toRoutes

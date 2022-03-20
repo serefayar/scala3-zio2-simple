@@ -12,12 +12,10 @@ import eu.timepit.refined.auto.*
 
 trait FlywayAdapter:
 
-  def migrate(): IO[FlywayException, MigrateResult]
+  def migrate: IO[FlywayException, MigrateResult]
 
-object FlywayAdapter:
+object FlywayAdapter extends zio.Accessible[FlywayAdapter]
 
-  def migrate: ZIO[FlywayAdapter, FlywayException, MigrateResult] =
-    ZIO.serviceWithZIO(_.migrate())
 
 case class FlywayAdapterLive(config: PostgresConfig) extends FlywayAdapter:
   private def flyway: UIO[Flyway] =
@@ -26,12 +24,12 @@ case class FlywayAdapterLive(config: PostgresConfig) extends FlywayAdapter:
       .map(Flyway(_))
       
 
-  override def migrate(): IO[FlywayException, MigrateResult] = 
+  override def migrate: IO[FlywayException, MigrateResult] = 
       flyway.map(_.migrate())
 
       
 
 object FlywayAdapterLive:
   def layer: URLayer[Config, FlywayAdapterLive] = ZLayer.fromZIO(
-    Config.dbConfig.map(FlywayAdapterLive(_))
+    Config(_.dbConfig).map(FlywayAdapterLive(_))
   )

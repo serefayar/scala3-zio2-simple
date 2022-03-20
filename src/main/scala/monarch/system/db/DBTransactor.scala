@@ -18,8 +18,7 @@ import scala.concurrent.ExecutionContext
 trait DBTransactor:
   val trx: UIO[Transactor[Task]]
 
-object DBTransactor:
-  def trx: URIO[DBTransactor, Transactor[Task]] = ZIO.serviceWithZIO(_.trx)
+object DBTransactor extends zio.Accessible[DBTransactor]
 
 case class DBTransactorLive(trx: UIO[Transactor[Task]]) extends DBTransactor
 
@@ -39,7 +38,7 @@ object DBTransactorLive:
       .toManagedZIO
 
   val managed: ZManaged[Config, Throwable, Transactor[Task]] = (for {
-    dbConfig <- Config.dbConfig.toManaged
+    dbConfig <- Config(_.dbConfig).toManaged
     ce <- ZIO.descriptor
       .map(_.executor.asExecutionContext)
       .toManaged
@@ -48,7 +47,7 @@ object DBTransactorLive:
 
   val managedWithMigration
       : ZManaged[FlywayAdapter & Config, Throwable, Transactor[Task]] =
-    FlywayAdapter.migrate.toManaged *> managed
+    FlywayAdapter(_.migrate).toManaged *> managed
 
   val layer: RLayer[FlywayAdapter & Config, DBTransactor] = ZLayer.fromManaged(
     managedWithMigration.map(t => DBTransactorLive(UIO(t)))

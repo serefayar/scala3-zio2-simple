@@ -8,9 +8,8 @@ trait Config:
   val dbConfig: UIO[PostgresConfig]
   val httpServer: UIO[HttpServerConfig]
 
-object Config:
-  def dbConfig: URIO[Config, PostgresConfig] = ZIO.serviceWithZIO(_.dbConfig)
-  def httpServerConfig: URIO[Config, HttpServerConfig] = ZIO.serviceWithZIO(_.httpServer)
+object Config extends zio.Accessible[Config]
+  
 
 case class ConfigLive(
     dbConfig: UIO[PostgresConfig],

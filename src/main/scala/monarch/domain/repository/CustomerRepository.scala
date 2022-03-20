@@ -42,5 +42,5 @@ case class CustomerRepositoryLive(trx: Transactor[Task])
 
 object CustomerRepositoryLive:
   val layer: URLayer[DBTransactor, CustomerRepository] = ZLayer.fromZIO(
-    DBTransactor.trx.map(CustomerRepositoryLive(_))
+    DBTransactor(_.trx).map(CustomerRepositoryLive(_))
   )
