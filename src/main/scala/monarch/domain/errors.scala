@@ -7,9 +7,11 @@ object errors:
   
   sealed trait Error extends Throwable with NoStackTrace
 
-  case class CustomerNotFound(customerId: Long) extends Throwable(s"Customer with id ${customerId} was not found!") with Error
-  case class UnknownError() extends Throwable(s"Unkown Error!") with Error
 
-  sealed trait ValidationError  extends Error
-  
-  case class EmptyField(field: String, msg: String) extends Throwable(s"Field ${field}: ${msg}") with ValidationError
+  enum DomainError(msg: String) extends Throwable(msg) with Error:
+    case CustomerNotFound(customerId: Long) extends DomainError(s"Customer with id ${customerId} was not found!")
+    case UnknownError() extends DomainError(s"Unkown Error!")
+    
+
+  enum ValidationError(msg: String) extends Throwable(msg) with Error:
+    case EmptyField(field: String, msg: String) extends ValidationError(s"Field ${field}: ${msg}")  

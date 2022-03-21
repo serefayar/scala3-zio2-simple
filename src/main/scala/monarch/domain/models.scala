@@ -6,7 +6,7 @@ import eu.timepit.refined.types.string.NonEmptyString
 import cats.data.EitherNel
 import cats.implicits.*
 import monarch.domain.errors.ValidationError
-import monarch.domain.errors.EmptyField
+import monarch.domain.errors.DomainError.*
 
 object models:
 
@@ -22,6 +22,6 @@ object models:
         lastName: String
     ): EitherNel[ValidationError, Customer] =
       (
-        NonEmptyString.from(firstName).leftMap(EmptyField("firstName", _)).toEitherNel,
-        NonEmptyString.from(lastName).leftMap(EmptyField("lastName", _)).toEitherNel
+        NonEmptyString.from(firstName).leftMap(ValidationError.EmptyField("firstName", _)).toEitherNel,
+        NonEmptyString.from(lastName).leftMap(ValidationError.EmptyField("lastName", _)).toEitherNel
       ).parMapN(Customer(-1, _, _))

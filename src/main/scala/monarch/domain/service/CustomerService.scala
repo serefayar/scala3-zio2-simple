@@ -1,6 +1,6 @@
 package monarch.domain.service
 
-import monarch.domain.errors.{Error, CustomerNotFound, UnknownError}
+import monarch.domain.errors.DomainError
 import monarch.domain.models.Customer
 import monarch.domain.repository.CustomerRepository
 import zio.*
@@ -22,7 +22,7 @@ case class CustomerServiceLive(repo: CustomerRepository)
     repo
       .getById(id)
       .flatMap(maybeCustomer =>
-        ZIO.fromOption(maybeCustomer).mapError(_ => CustomerNotFound(id))
+        ZIO.fromOption(maybeCustomer).mapError(_ => DomainError.CustomerNotFound(id))
       )
 
   override def create(customer: Customer): RIO[CustomerRepository, Long] =

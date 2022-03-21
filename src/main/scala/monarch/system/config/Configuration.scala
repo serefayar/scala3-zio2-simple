@@ -1,8 +1,7 @@
 package monarch.system.config
 
 import pureconfig.ConfigReader
-import pureconfig.generic.derivation.default._
-
+import pureconfig.generic.derivation.default.*
 
 case class Configuration(
     httpServer: HttpServerConfig,
